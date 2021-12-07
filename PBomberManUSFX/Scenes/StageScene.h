@@ -7,6 +7,7 @@
 #include "../Entities/Text.h"
 #include "../Scenes/Scene.h"
 #include "../GameVersions.h"
+#include "../GamePlayers.h"
 
 /**
     * @brief Stage Scene
@@ -22,6 +23,8 @@ class StageScene : public Scene
         */
     StageScene(GameManager* _gameManager, const unsigned int _level, const unsigned int _score);
     StageScene(GameManager* _gameManager, GameVersion _gameVersion, const unsigned int _level, const unsigned int _score);
+    StageScene(GameManager* _gameManager, GameVersion _gameVersion, GamePlayer _gamePlayer, const unsigned int _level, const unsigned int _score);
+
     /**
         * @brief Trigger on update if scene is active
         *
@@ -35,6 +38,7 @@ class StageScene : public Scene
     // const
     const int sceneTimer = 2000;
     GameVersion gameVersion = GameVersion::GAMEVERSION_CLASIC;
+    GamePlayer gamePlayer = GamePlayer::GAMEPLAYER_1PLAYER;
     unsigned int stage = 0;
     unsigned int score = 0;
 };

@@ -105,6 +105,56 @@ LevelScene::LevelScene(GameManager* _gameManager, GameVersion _gameVersion, cons
     updateLevelTimer();
 }
 
+LevelScene::LevelScene(GameManager* _gameManager, GameVersion _gameVersion, GamePlayer _gamePlayer, const unsigned int _stage, const unsigned int prevScore)
+    : Scene(_gameManager), gameVersion(_gameVersion), gamePlayer(_gamePlayer), score(prevScore), stage(_stage)
+{
+
+    if (gameVersion == GameVersion::GAMEVERSION_CARTOON) {
+        factory = new FactoryGameCartoon();
+    }
+    else if (gameVersion == GameVersion::GAMEVERSION_CLASIC) {
+        factory = new FactoryGameClasico();
+    }
+    /*else if (gameVersion == GameVersion::GAMEVERSION_CUSTOM) {
+        factory = FactoryGameCustom();
+    }
+    else {
+        factory = FactoryGameRealo();
+    }*/
+
+    // common field parameters
+    fieldPositionX = 0;
+    //fieldPositionY = 0;
+    fieldPositionY = gameManager->getWindowHeight() / 15;
+    const float scale = (gameManager->getWindowHeight() - fieldPositionY) / static_cast<float>(tileArrayHeight * tileSize);
+    scaledTileSize = static_cast<int>(round(scale * tileSize));
+    Tile::tileHeight = scaledTileSize;
+    Tile::tileWidth = scaledTileSize;
+
+    // menu music
+    menuMusic = std::make_shared<Music>(gameManager->getAssetManager()->getMusic(MusicEnum::Level));
+    menuMusic->play();
+    // sounds
+    gameoverSound = std::make_shared<Sound>(gameManager->getAssetManager()->getSound(SoundEnum::Lose));
+    winSound = std::make_shared<Sound>(gameManager->getAssetManager()->getSound(SoundEnum::Win));
+    explosionSound = std::make_shared<Sound>(gameManager->getAssetManager()->getSound(SoundEnum::Explosion));
+    // render text
+    spawnTextObjects();
+    // generate tile map
+    //generateTileMap();
+    // 
+    //tileGraph = new TileGraph(25, 15);
+    crearObjetosJuego("resources/level1.txt");
+    // prepare player
+    spawnPlayer(fieldPositionX + playerStartX * scaledTileSize,
+        fieldPositionY + playerStartY * scaledTileSize);
+    // generate enemies
+    generateEnemies();
+    // set timer
+    updateLevelTimer();
+}
+
+
 void LevelScene::spawnTextObjects()
 {
     const int fontWidth = static_cast<int>(gameManager->getWindowWidth() / 32.0f);
@@ -265,11 +315,16 @@ void LevelScene::spawnPlayer(const int positionX, const int positionY)
     //player = std::make_unique<Player>(gameManager->getAssetManager()->getTexture(GameTexture::Player), gameManager->getRenderer());
     //player = std::make_unique<ClasicoPlayer>(gameManager->getAssetManager()->getTexture(GameTexture::Player), gameManager->getRenderer());
     player = dynamic_pointer_cast<Player>(factory->CreatePlayer(positionX, positionY));
-
+    //player2 = dynamic_pointer_cast<Player>(factory->CreatePlayer(fieldPositionX + 2 * scaledTileSize, fieldPositionY + 2 * scaledTileSize));
+    //player3 = dynamic_pointer_cast<Player>(factory->CreatePlayer(fieldPositionX + 3 * scaledTileSize, fieldPositionY + 3 * scaledTileSize));
+    //player4 = dynamic_pointer_cast<Player>(factory->CreatePlayer(fieldPositionX + 4 * scaledTileSize, fieldPositionY + 4 * scaledTileSize));
     /*player->setPosition(positionX, positionY);
     player->setSize(scaledTileSize, scaledTileSize);
     player->setClip(tileSize, tileSize, tileSize * 4, 0);*/
     addObject(player);
+    //addObject(player2);
+    //addObject(player3);
+    //addObject(player4);
 }
 
 void LevelScene::spawnEnemy(GameTexture texture, AIType type, const int positionX, const int positionY)
@@ -1013,7 +1068,7 @@ bool LevelScene::crearObjetosJuego(string _path)
                     break;
     			case '2':
                     spawnStone(fieldPositionX + x * scaledTileSize, fieldPositionY + y * scaledTileSize);
-                    //spawnWallPacman(fieldPositionX + x * scaledTileSize, fieldPositionY + y * scaledTileSize, tile);
+                    spawnWallPacman(fieldPositionX + x * scaledTileSize, fieldPositionY + y * scaledTileSize, tile);
        				break;
     			}
                 x++;

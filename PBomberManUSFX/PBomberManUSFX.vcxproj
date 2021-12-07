@@ -237,6 +237,7 @@
     <ClInclude Include="Factories\FactoryGamePersonalizado.h" />
     <ClInclude Include="Factories\FactoryGameRealista.h" />
     <ClInclude Include="GameAITypes.h" />
+    <ClInclude Include="GamePlayers.h" />
     <ClInclude Include="Scenes\GameLevelScene.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameTextures.h" />

@@ -21,6 +21,7 @@
 #include "../Factories/FactoryGameCartoon.h"
 #include "../Entities/ClasicoPlayer.h"
 #include "../GameVersions.h"
+#include "../GamePlayers.h"
 #include "../GameTextures.h"
 
 #include "../Adapters/WallPacman.h"
@@ -48,7 +49,7 @@ public:
         */
     LevelScene(GameManager* game, const unsigned int _stage, const unsigned int _prevScore);
     LevelScene(GameManager* game, GameVersion _gameVersion, const unsigned int _stage, const unsigned int _prevScore);
-    
+    LevelScene(GameManager* game, GameVersion _gameVersion, GamePlayer _gamePlayer, const unsigned int _stage, const unsigned int _prevScore);
     /**
         * @brief Catch SDL2 events
         *
@@ -146,7 +147,14 @@ private:
     std::vector<std::shared_ptr<GameGraphicObject>> bangs;                       // bomb's bang
     GameTile tiles[tileArrayHeight][tileArrayWidth];                      // tilemap
 
-
+    //_________________________________________________________________________________________________________________________________
+    //_________________________________________________________________________________________________________________________________
+    std::shared_ptr<Player> player2 = nullptr;                         // player
+    std::shared_ptr<Player> player3 = nullptr;                         // player
+    std::shared_ptr<Player> player4 = nullptr;                         // player
+    //_________________________________________________________________________________________________________________________________
+    //_________________________________________________________________________________________________________________________________
+    
     int playerDirectionX = 0; // direction used for control
     int playerDirectionY = 0; // direction used for control
     // timer variables
@@ -161,6 +169,7 @@ private:
     bool isWin = false;
     // variables
     unsigned int gameVersion = GAMEVERSION_CLASIC;
+    unsigned int gamePlayer = GAMEPLAYER_1PLAYER;
     unsigned int score = 0;
     unsigned int stage = 0;
 
