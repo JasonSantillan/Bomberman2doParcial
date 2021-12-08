@@ -526,6 +526,7 @@ void LevelScene::onEvent(const SDL_Event& event)
             isWin = false;
             gameOverTimer = winTimerStart;
         }
+        //__________________________________________________________________________________________________
         // we can spawn a bomb by space press
         else if(event.key.keysym.scancode == SDL_SCANCODE_SPACE)
         {
@@ -534,6 +535,28 @@ void LevelScene::onEvent(const SDL_Event& event)
                 spawnBomb(player.get());
             }
         }
+        else if (event.key.keysym.scancode == SDL_SCANCODE_2)
+        {
+            if (!isGameOver)
+            {
+                spawnBomb(player2.get());
+            }
+        }
+        else if (event.key.keysym.scancode == SDL_SCANCODE_3)
+        {
+            if (!isGameOver)
+            {
+                spawnBomb(player3.get());
+            }
+        }
+        else if (event.key.keysym.scancode == SDL_SCANCODE_4)
+        {
+            if (!isGameOver)
+            {
+                spawnBomb(player4.get());
+            }
+        }
+        //__________________________________________________________________________________________________
         // we can pause a gameManager by pressing enter key
         else if(event.key.keysym.scancode == SDL_SCANCODE_RETURN)
         {
