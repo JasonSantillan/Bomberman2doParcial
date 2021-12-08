@@ -23,86 +23,86 @@ LevelScene::LevelScene(GameManager* _gameManager, const unsigned int _stage, con
     : Scene(_gameManager), score(prevScore), stage(_stage)
 {
     
-    // common field parameters
-    fieldPositionX = 0;
-    fieldPositionY = gameManager->getWindowHeight() / 15;
-    //fieldPositionY = 0;
-    const float scale = (gameManager->getWindowHeight() - fieldPositionY) / static_cast<float>(tileArrayHeight * tileSize);
-    scaledTileSize = static_cast<int>(round(scale * tileSize));
-    
-    Tile::tileHeight = scaledTileSize;
-    Tile::tileWidth = scaledTileSize;
+    //// common field parameters
+    //fieldPositionX = 0;
+    //fieldPositionY = gameManager->getWindowHeight() / 15;
+    ////fieldPositionY = 0;
+    //const float scale = (gameManager->getWindowHeight() - fieldPositionY) / static_cast<float>(tileArrayHeight * tileSize);
+    //scaledTileSize = static_cast<int>(round(scale * tileSize));
+    //
+    //Tile::tileHeight = scaledTileSize;
+    //Tile::tileWidth = scaledTileSize;
 
-    // menu music
-    menuMusic = std::make_shared<Music>(gameManager->getAssetManager()->getMusic(MusicEnum::Level));
-    menuMusic->play();
-    // sounds
-    gameoverSound = std::make_shared<Sound>(gameManager->getAssetManager()->getSound(SoundEnum::Lose));
-    winSound = std::make_shared<Sound>(gameManager->getAssetManager()->getSound(SoundEnum::Win));
-    explosionSound = std::make_shared<Sound>(gameManager->getAssetManager()->getSound(SoundEnum::Explosion));
-    // render text
-    spawnTextObjects();
-    // generate tile map
-    //generateTileMap();
-    // 
-    
-    //tileGraph = new TileGraph(25, 15);
-    crearObjetosJuego("resources/level1.txt");
-    // prepare player
-    spawnPlayer(fieldPositionX + playerStartX * scaledTileSize, fieldPositionY + playerStartY * scaledTileSize);
-    // generate enemies
-    generateEnemies();
-    // set timer
-    updateLevelTimer();
+    //// menu music
+    //menuMusic = std::make_shared<Music>(gameManager->getAssetManager()->getMusic(MusicEnum::Level));
+    //menuMusic->play();
+    //// sounds
+    //gameoverSound = std::make_shared<Sound>(gameManager->getAssetManager()->getSound(SoundEnum::Lose));
+    //winSound = std::make_shared<Sound>(gameManager->getAssetManager()->getSound(SoundEnum::Win));
+    //explosionSound = std::make_shared<Sound>(gameManager->getAssetManager()->getSound(SoundEnum::Explosion));
+    //// render text
+    //spawnTextObjects();
+    //// generate tile map
+    ////generateTileMap();
+    //// 
+    //
+    ////tileGraph = new TileGraph(25, 15);
+    //crearObjetosJuego("resources/level1.txt");
+    //// prepare player
+    //spawnPlayer(fieldPositionX + playerStartX * scaledTileSize, fieldPositionY + playerStartY * scaledTileSize);
+    //// generate enemies
+    //generateEnemies();
+    //// set timer
+    //updateLevelTimer();
 }
 
 LevelScene::LevelScene(GameManager* _gameManager, GameVersion _gameVersion, const unsigned int _stage, const unsigned int prevScore)
     : Scene(_gameManager), gameVersion(_gameVersion), score(prevScore), stage(_stage)
 {
     
-    if (gameVersion == GameVersion::GAMEVERSION_CARTOON) {
-        factory = new FactoryGameCartoon();
-    }
-    else if (gameVersion == GameVersion::GAMEVERSION_CLASIC) {
-        factory = new FactoryGameClasico();
-    }
-    /*else if (gameVersion == GameVersion::GAMEVERSION_CUSTOM) {
-        factory = FactoryGameCustom();
-    }
-    else {
-        factory = FactoryGameRealo();
-    }*/
+    //if (gameVersion == GameVersion::GAMEVERSION_CARTOON) {
+    //    factory = new FactoryGameCartoon();
+    //}
+    //else if (gameVersion == GameVersion::GAMEVERSION_CLASIC) {
+    //    factory = new FactoryGameClasico();
+    //}
+    ///*else if (gameVersion == GameVersion::GAMEVERSION_CUSTOM) {
+    //    factory = FactoryGameCustom();
+    //}
+    //else {
+    //    factory = FactoryGameRealo();
+    //}*/
 
-    // common field parameters
-    fieldPositionX = 0;
-    //fieldPositionY = 0;
-    fieldPositionY = gameManager->getWindowHeight() / 15;
-    const float scale = (gameManager->getWindowHeight() - fieldPositionY) / static_cast<float>(tileArrayHeight * tileSize);
-    scaledTileSize = static_cast<int>(round(scale * tileSize));
-    Tile::tileHeight = scaledTileSize;
-    Tile::tileWidth = scaledTileSize;
+    //// common field parameters
+    //fieldPositionX = 0;
+    ////fieldPositionY = 0;
+    //fieldPositionY = gameManager->getWindowHeight() / 15;
+    //const float scale = (gameManager->getWindowHeight() - fieldPositionY) / static_cast<float>(tileArrayHeight * tileSize);
+    //scaledTileSize = static_cast<int>(round(scale * tileSize));
+    //Tile::tileHeight = scaledTileSize;
+    //Tile::tileWidth = scaledTileSize;
 
-    // menu music
-    menuMusic = std::make_shared<Music>(gameManager->getAssetManager()->getMusic(MusicEnum::Level));
-    menuMusic->play();
-    // sounds
-    gameoverSound = std::make_shared<Sound>(gameManager->getAssetManager()->getSound(SoundEnum::Lose));
-    winSound = std::make_shared<Sound>(gameManager->getAssetManager()->getSound(SoundEnum::Win));
-    explosionSound = std::make_shared<Sound>(gameManager->getAssetManager()->getSound(SoundEnum::Explosion));
-    // render text
-    spawnTextObjects();
-    // generate tile map
-    //generateTileMap();
-    // 
-    //tileGraph = new TileGraph(25, 15);
-    crearObjetosJuego("resources/level1.txt");
-    // prepare player
-    spawnPlayer(fieldPositionX + playerStartX * scaledTileSize,
-        fieldPositionY + playerStartY * scaledTileSize);
-    // generate enemies
-    generateEnemies();
-    // set timer
-    updateLevelTimer();
+    //// menu music
+    //menuMusic = std::make_shared<Music>(gameManager->getAssetManager()->getMusic(MusicEnum::Level));
+    //menuMusic->play();
+    //// sounds
+    //gameoverSound = std::make_shared<Sound>(gameManager->getAssetManager()->getSound(SoundEnum::Lose));
+    //winSound = std::make_shared<Sound>(gameManager->getAssetManager()->getSound(SoundEnum::Win));
+    //explosionSound = std::make_shared<Sound>(gameManager->getAssetManager()->getSound(SoundEnum::Explosion));
+    //// render text
+    //spawnTextObjects();
+    //// generate tile map
+    ////generateTileMap();
+    //// 
+    ////tileGraph = new TileGraph(25, 15);
+    //crearObjetosJuego("resources/level1.txt");
+    //// prepare player
+    //spawnPlayer(fieldPositionX + playerStartX * scaledTileSize,
+    //    fieldPositionY + playerStartY * scaledTileSize);
+    //// generate enemies
+    //generateEnemies();
+    //// set timer
+    //updateLevelTimer();
 }
 
 LevelScene::LevelScene(GameManager* _gameManager, GameVersion _gameVersion, GamePlayer _gamePlayer, const unsigned int _stage, const unsigned int prevScore)
@@ -146,8 +146,10 @@ LevelScene::LevelScene(GameManager* _gameManager, GameVersion _gameVersion, Game
     //tileGraph = new TileGraph(25, 15);
     crearObjetosJuego("resources/level1.txt");
     // prepare player
-    spawnPlayer(fieldPositionX + playerStartX * scaledTileSize,
-        fieldPositionY + playerStartY * scaledTileSize);
+    spawnPlayer(fieldPositionX + playerStartX * scaledTileSize, fieldPositionY + playerStartY * scaledTileSize,
+                fieldPositionX + 2            * scaledTileSize, fieldPositionY + 2            * scaledTileSize, 
+                fieldPositionX + 3            * scaledTileSize, fieldPositionY + 3            * scaledTileSize, 
+                fieldPositionX + 3            * scaledTileSize, fieldPositionY + 5            * scaledTileSize);
     // generate enemies
     generateEnemies();
     // set timer
@@ -307,7 +309,8 @@ void LevelScene::spawnWallPacman(const int positionX, const int positionY, Tile*
 }
 
 
-void LevelScene::spawnPlayer(const int positionX, const int positionY)
+void LevelScene::spawnPlayer(const int positionX, const int positionY, const int positionX2, const int positionY2,
+    const int positionX3, const int positionY3, const int positionX4, const int positionY4)
 {
     // spawn player
 
@@ -315,16 +318,16 @@ void LevelScene::spawnPlayer(const int positionX, const int positionY)
     //player = std::make_unique<Player>(gameManager->getAssetManager()->getTexture(GameTexture::Player), gameManager->getRenderer());
     //player = std::make_unique<ClasicoPlayer>(gameManager->getAssetManager()->getTexture(GameTexture::Player), gameManager->getRenderer());
     player = dynamic_pointer_cast<Player>(factory->CreatePlayer(positionX, positionY));
-    //player2 = dynamic_pointer_cast<Player>(factory->CreatePlayer(fieldPositionX + 2 * scaledTileSize, fieldPositionY + 2 * scaledTileSize));
-    //player3 = dynamic_pointer_cast<Player>(factory->CreatePlayer(fieldPositionX + 3 * scaledTileSize, fieldPositionY + 3 * scaledTileSize));
-    //player4 = dynamic_pointer_cast<Player>(factory->CreatePlayer(fieldPositionX + 4 * scaledTileSize, fieldPositionY + 4 * scaledTileSize));
+    player2 = dynamic_pointer_cast<Player>(factory->CreatePlayer(positionX2, positionY2));
+    player3 = dynamic_pointer_cast<Player>(factory->CreatePlayer(positionX3, positionY3));
+    player4 = dynamic_pointer_cast<Player>(factory->CreatePlayer(positionX4, positionY4));
     /*player->setPosition(positionX, positionY);
     player->setSize(scaledTileSize, scaledTileSize);
     player->setClip(tileSize, tileSize, tileSize * 4, 0);*/
     addObject(player);
-    //addObject(player2);
-    //addObject(player3);
-    //addObject(player4);
+    addObject(player2);
+    addObject(player3);
+    addObject(player4);
 }
 
 void LevelScene::spawnEnemy(GameTexture texture, AIType type, const int positionX, const int positionY)
@@ -508,7 +511,10 @@ void LevelScene::onEvent(const SDL_Event& event)
     // we need to update movement if movement keys pressed or released
     if((event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) && event.key.repeat == 0)
     {
-        updateMovement(event.type == SDL_KEYDOWN ? true : false, event.key.keysym.scancode);
+        updateMovementPlayer(event.type == SDL_KEYDOWN ? true : false, event.key.keysym.scancode);
+        updateMovementPlayer2(event.type == SDL_KEYDOWN ? true : false, event.key.keysym.scancode);
+        updateMovementPlayer3(event.type == SDL_KEYDOWN ? true : false, event.key.keysym.scancode);
+        updateMovementPlayer4(event.type == SDL_KEYDOWN ? true : false, event.key.keysym.scancode);
     }
 
     if(event.type == SDL_KEYDOWN)
@@ -670,7 +676,9 @@ void LevelScene::updateGameOverTimer(const unsigned int delta)
     }
 }
 
-void LevelScene::updateMovement(const bool isPressed, const int keycode)
+//____________________________________________________________________________________________________________________________
+//____________________________________________________________________________________________________________________________
+void LevelScene::updateMovementPlayer(const bool isPressed, const int keycode)
 {
     if(player == nullptr)
     {
@@ -681,19 +689,15 @@ void LevelScene::updateMovement(const bool isPressed, const int keycode)
     {
         switch(keycode)
         {
-            case SDL_SCANCODE_W:
             case SDL_SCANCODE_UP:
                 playerDirectionY -= 1;
                 break;
-            case SDL_SCANCODE_S:
             case SDL_SCANCODE_DOWN:
                 playerDirectionY += 1;
                 break;
-            case SDL_SCANCODE_A:
             case SDL_SCANCODE_LEFT:
                 playerDirectionX -= 1;
                 break;
-            case SDL_SCANCODE_D:
             case SDL_SCANCODE_RIGHT:
                 playerDirectionX += 1;
                 break;
@@ -706,19 +710,15 @@ void LevelScene::updateMovement(const bool isPressed, const int keycode)
     {
         switch(keycode)
         {
-            case SDL_SCANCODE_W:
             case SDL_SCANCODE_UP:
                 playerDirectionY += 1;
                 break;
-            case SDL_SCANCODE_S:
             case SDL_SCANCODE_DOWN:
                 playerDirectionY -= 1;
                 break;
-            case SDL_SCANCODE_A:
             case SDL_SCANCODE_LEFT:
                 playerDirectionX += 1;
                 break;
-            case SDL_SCANCODE_D:
             case SDL_SCANCODE_RIGHT:
                 playerDirectionX -= 1;
                 break;
@@ -750,10 +750,236 @@ void LevelScene::updateMovement(const bool isPressed, const int keycode)
             direction = MovementDirection::Up;
         }
     }
-    // apply direction
     player->setMovementDirection(direction);
 }
 
+void LevelScene::updateMovementPlayer2(const bool isPressed, const int keycode)
+{
+    if (player2 == nullptr)
+    {
+        return;
+    }
+    // on press we start movement
+    if (isPressed)
+    {
+        switch (keycode)
+        {
+        case SDL_SCANCODE_W:
+            player2DirectionY -= 1;
+            break;
+        case SDL_SCANCODE_S:
+            player2DirectionY += 1;
+            break;
+        case SDL_SCANCODE_A:
+            player2DirectionX -= 1;
+            break;
+        case SDL_SCANCODE_D:
+            player2DirectionX += 1;
+            break;
+        default:
+            break;
+        }
+    }
+    // on release we stop moving
+    else
+    {
+        switch (keycode)
+        {
+        case SDL_SCANCODE_W:
+            player2DirectionY += 1;
+            break;
+        case SDL_SCANCODE_S:
+            player2DirectionY -= 1;
+            break;
+        case SDL_SCANCODE_A:
+            player2DirectionX += 1;
+            break;
+        case SDL_SCANCODE_D:
+            player2DirectionX -= 1;
+            break;
+        default:
+            break;
+        }
+    }
+    // depend on pressed key choose player's direction
+    MovementDirection direction2 = MovementDirection::None;
+    if (player2DirectionX != 0)
+    {
+        if (player2DirectionX > 0)
+        {
+            direction2 = MovementDirection::Right;
+        }
+        else
+        {
+            direction2 = MovementDirection::Left;
+        }
+    }
+    else if (player2DirectionY != 0)
+    {
+        if (player2DirectionY > 0)
+        {
+            direction2 = MovementDirection::Down;
+        }
+        else
+        {
+            direction2 = MovementDirection::Up;
+        }
+    }
+    player2->setMovementDirection(direction2);
+}
+
+void LevelScene::updateMovementPlayer3(const bool isPressed, const int keycode)
+{
+    if (player3 == nullptr)
+    {
+        return;
+    }
+    // on press we start movement
+    if (isPressed)
+    {
+        switch (keycode)
+        {
+        case SDL_SCANCODE_Y:
+            player3DirectionY -= 1;
+            break;
+        case SDL_SCANCODE_U:
+            player3DirectionY += 1;
+            break;
+        case SDL_SCANCODE_I:
+            player3DirectionX -= 1;
+            break;
+        case SDL_SCANCODE_O:
+            player3DirectionX += 1;
+            break;
+        default:
+            break;
+        }
+    }
+    // on release we stop moving
+    else
+    {
+        switch (keycode)
+        {
+        case SDL_SCANCODE_Y:
+            player3DirectionY += 1;
+            break;
+        case SDL_SCANCODE_U:
+            player3DirectionY -= 1;
+            break;
+        case SDL_SCANCODE_I:
+            player3DirectionX += 1;
+            break;
+        case SDL_SCANCODE_O:
+            player3DirectionX -= 1;
+            break;
+        default:
+            break;
+        }
+    }
+    // depend on pressed key choose player's direction
+    MovementDirection direction3 = MovementDirection::None;
+    if (player3DirectionX != 0)
+    {
+        if (player3DirectionX > 0)
+        {
+            direction3 = MovementDirection::Right;
+        }
+        else
+        {
+            direction3 = MovementDirection::Left;
+        }
+    }
+    else if (player3DirectionY != 0)
+    {
+        if (player3DirectionY > 0)
+        {
+            direction3 = MovementDirection::Down;
+        }
+        else
+        {
+            direction3 = MovementDirection::Up;
+        }
+    }
+    player3->setMovementDirection(direction3);
+}
+
+void LevelScene::updateMovementPlayer4(const bool isPressed, const int keycode)
+{
+    if (player4 == nullptr)
+    {
+        return;
+    }
+    // on press we start movement
+    if (isPressed)
+    {
+        switch (keycode)
+        {
+        case SDL_SCANCODE_H:
+            player4DirectionY -= 1;
+            break;
+        case SDL_SCANCODE_J:
+            player4DirectionY += 1;
+            break;
+        case SDL_SCANCODE_K:
+            player4DirectionX -= 1;
+            break;
+        case SDL_SCANCODE_L:
+            player4DirectionX += 1;
+            break;
+        default:
+            break;
+        }
+    }
+    // on release we stop moving
+    else
+    {
+        switch (keycode)
+        {
+        case SDL_SCANCODE_H:
+            player4DirectionY += 1;
+            break;
+        case SDL_SCANCODE_J:
+            player4DirectionY -= 1;
+            break;
+        case SDL_SCANCODE_K:
+            player4DirectionX += 1;
+            break;
+        case SDL_SCANCODE_L:
+            player4DirectionX -= 1;
+            break;
+        default:
+            break;
+        }
+    }
+    // depend on pressed key choose player's direction
+    MovementDirection direction4 = MovementDirection::None;
+    if (player4DirectionX != 0)
+    {
+        if (player4DirectionX > 0)
+        {
+            direction4 = MovementDirection::Right;
+        }
+        else
+        {
+            direction4 = MovementDirection::Left;
+        }
+    }
+    else if (player4DirectionY != 0)
+    {
+        if (player4DirectionY > 0)
+        {
+            direction4 = MovementDirection::Down;
+        }
+        else
+        {
+            direction4 = MovementDirection::Up;
+        }
+    }
+    player4->setMovementDirection(direction4);
+}
+
+//____________________________________________________________________________________________________________________________
+//____________________________________________________________________________________________________________________________
 void LevelScene::updateCamera()
 {
     if(player == nullptr)
