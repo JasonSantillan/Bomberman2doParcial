@@ -147,9 +147,9 @@ LevelScene::LevelScene(GameManager* _gameManager, GameVersion _gameVersion, Game
     crearObjetosJuego("resources/level1.txt");
     // prepare player
     spawnPlayer(fieldPositionX + playerStartX * scaledTileSize, fieldPositionY + playerStartY * scaledTileSize,
-                fieldPositionX + 2            * scaledTileSize, fieldPositionY + 2            * scaledTileSize, 
-                fieldPositionX + 3            * scaledTileSize, fieldPositionY + 3            * scaledTileSize, 
-                fieldPositionX + 3            * scaledTileSize, fieldPositionY + 5            * scaledTileSize);
+                fieldPositionX + 1            * scaledTileSize, fieldPositionY + 5            * scaledTileSize, 
+                fieldPositionX + 1            * scaledTileSize, fieldPositionY + 7            * scaledTileSize, 
+                fieldPositionX + 1            * scaledTileSize, fieldPositionY + 13            * scaledTileSize);
     // generate enemies
     generateEnemies();
     // set timer
@@ -313,21 +313,47 @@ void LevelScene::spawnPlayer(const int positionX, const int positionY, const int
     const int positionX3, const int positionY3, const int positionX4, const int positionY4)
 {
     // spawn player
-
-
+    if (gamePlayer == GamePlayer::GAMEPLAYER_1PLAYER) {
+        player = dynamic_pointer_cast<Player>(factory->CreatePlayer(positionX, positionY));
+        addObject(player);
+    }
+    else if (gamePlayer == GamePlayer::GAMEPLAYER_2PLAYER) {
+        player = dynamic_pointer_cast<Player>(factory->CreatePlayer(positionX, positionY));
+        player2 = dynamic_pointer_cast<Player>(factory->CreatePlayer(positionX2, positionY2));
+        addObject(player);
+        addObject(player2);
+    }
+    else if (gamePlayer == GamePlayer::GAMEPLAYER_3PLAYER) {
+        player = dynamic_pointer_cast<Player>(factory->CreatePlayer(positionX, positionY));
+        player2 = dynamic_pointer_cast<Player>(factory->CreatePlayer(positionX2, positionY2));
+        player3 = dynamic_pointer_cast<Player>(factory->CreatePlayer(positionX3, positionY3));
+        addObject(player);
+        addObject(player2);
+        addObject(player3);
+    }
+    else {
+        player = dynamic_pointer_cast<Player>(factory->CreatePlayer(positionX, positionY));
+        player2 = dynamic_pointer_cast<Player>(factory->CreatePlayer(positionX2, positionY2));
+        player3 = dynamic_pointer_cast<Player>(factory->CreatePlayer(positionX3, positionY3));
+        player4 = dynamic_pointer_cast<Player>(factory->CreatePlayer(positionX4, positionY4));
+        addObject(player);
+        addObject(player2);
+        addObject(player3);
+        addObject(player4);
+    }
     //player = std::make_unique<Player>(gameManager->getAssetManager()->getTexture(GameTexture::Player), gameManager->getRenderer());
     //player = std::make_unique<ClasicoPlayer>(gameManager->getAssetManager()->getTexture(GameTexture::Player), gameManager->getRenderer());
-    player = dynamic_pointer_cast<Player>(factory->CreatePlayer(positionX, positionY));
-    player2 = dynamic_pointer_cast<Player>(factory->CreatePlayer(positionX2, positionY2));
-    player3 = dynamic_pointer_cast<Player>(factory->CreatePlayer(positionX3, positionY3));
-    player4 = dynamic_pointer_cast<Player>(factory->CreatePlayer(positionX4, positionY4));
+    //player = dynamic_pointer_cast<Player>(factory->CreatePlayer(positionX, positionY));
+    //player2 = dynamic_pointer_cast<Player>(factory->CreatePlayer(positionX2, positionY2));
+    //player3 = dynamic_pointer_cast<Player>(factory->CreatePlayer(positionX3, positionY3));
+    //player4 = dynamic_pointer_cast<Player>(factory->CreatePlayer(positionX4, positionY4));
     /*player->setPosition(positionX, positionY);
     player->setSize(scaledTileSize, scaledTileSize);
     player->setClip(tileSize, tileSize, tileSize * 4, 0);*/
-    addObject(player);
-    addObject(player2);
-    addObject(player3);
-    addObject(player4);
+    //addObject(player);
+    //addObject(player2);
+    //addObject(player3);
+    //addObject(player4);
 }
 
 void LevelScene::spawnEnemy(GameTexture texture, AIType type, const int positionX, const int positionY)
@@ -527,6 +553,7 @@ void LevelScene::onEvent(const SDL_Event& event)
             gameOverTimer = winTimerStart;
         }
         //__________________________________________________________________________________________________
+        //__________________________________________________________________________________________________
         // we can spawn a bomb by space press
         else if(event.key.keysym.scancode == SDL_SCANCODE_SPACE)
         {
@@ -556,6 +583,7 @@ void LevelScene::onEvent(const SDL_Event& event)
                 spawnBomb(player4.get());
             }
         }
+        //__________________________________________________________________________________________________
         //__________________________________________________________________________________________________
         // we can pause a gameManager by pressing enter key
         else if(event.key.keysym.scancode == SDL_SCANCODE_RETURN)
@@ -591,6 +619,9 @@ void LevelScene::update(const unsigned int delta)
     Scene::update(delta);
     // update collision of player
     updatePlayerCollision();
+    updatePlayerCollision2();
+    updatePlayerCollision3();
+    updatePlayerCollision4();
     // update collision of enemies
     updateEnemiesCollision();
     // update collision of bricks
@@ -1041,7 +1072,8 @@ void LevelScene::updateScore()
     scoreNumber->setPosition(gameManager->getWindowWidth() / 2 - scoreNumber->getWidth() / 2,
                                 scoreNumber->getPositionY());
 }
-
+//_____________________________________________________________________________________________________________________________________
+//_____________________________________________________________________________________________________________________________________
 void LevelScene::updatePlayerCollision()
 {
     if(player == nullptr)
@@ -1082,6 +1114,128 @@ void LevelScene::updatePlayerCollision()
     }
 }
 
+void LevelScene::updatePlayerCollision2()
+{
+    if (player2 == nullptr)
+    {
+        return;
+    }
+    // there is no reason to check collision if player is idle
+    if (!player2->isMoving())
+    {
+        return;
+    }
+    // set width to smaller size for easer path
+    SDL_Rect playerRect2 = player2->getRect();
+    playerRect2.w = static_cast<int>(playerRect2.w * 0.5);
+    playerRect2.h = static_cast<int>(playerRect2.h * 0.5);
+    // iterate objects for collision
+    for (const auto& collisionObject : collisions)
+    {
+        if (isCollisionDetected(playerRect2, collisionObject.second->getRect()))
+        {
+            player2->revertLastMove();
+        }
+    }
+    // door collision
+    if (door != nullptr)
+    {
+        if (isCollisionDetected(playerRect2, door->getRect()))
+        {
+            // check win condition
+            if (!isGameOver && enemies.size() == 0)
+            {
+                gameOver();
+                isWin = true;
+                score += scoreRewardForStage;
+                gameOverTimer = winTimerStart;
+            }
+        }
+    }
+}
+
+void LevelScene::updatePlayerCollision3()
+{
+    if (player3 == nullptr)
+    {
+        return;
+    }
+    // there is no reason to check collision if player is idle
+    if (!player3->isMoving())
+    {
+        return;
+    }
+    // set width to smaller size for easer path
+    SDL_Rect playerRect3 = player3->getRect();
+    playerRect3.w = static_cast<int>(playerRect3.w * 0.5);
+    playerRect3.h = static_cast<int>(playerRect3.h * 0.5);
+    // iterate objects for collision
+    for (const auto& collisionObject : collisions)
+    {
+        if (isCollisionDetected(playerRect3, collisionObject.second->getRect()))
+        {
+            player3->revertLastMove();
+        }
+    }
+    // door collision
+    if (door != nullptr)
+    {
+        if (isCollisionDetected(playerRect3, door->getRect()))
+        {
+            // check win condition
+            if (!isGameOver && enemies.size() == 0)
+            {
+                gameOver();
+                isWin = true;
+                score += scoreRewardForStage;
+                gameOverTimer = winTimerStart;
+            }
+        }
+    }
+}
+
+void LevelScene::updatePlayerCollision4()
+{
+    if (player4 == nullptr)
+    {
+        return;
+    }
+    // there is no reason to check collision if player is idle
+    if (!player4->isMoving())
+    {
+        return;
+    }
+    // set width to smaller size for easer path
+    SDL_Rect playerRect4 = player4->getRect();
+    playerRect4.w = static_cast<int>(playerRect4.w * 0.5);
+    playerRect4.h = static_cast<int>(playerRect4.h * 0.5);
+    // iterate objects for collision
+    for (const auto& collisionObject : collisions)
+    {
+        if (isCollisionDetected(playerRect4, collisionObject.second->getRect()))
+        {
+            player4->revertLastMove();
+        }
+    }
+    // door collision
+    if (door != nullptr)
+    {
+        if (isCollisionDetected(playerRect4, door->getRect()))
+        {
+            // check win condition
+            if (!isGameOver && enemies.size() == 0)
+            {
+                gameOver();
+                isWin = true;
+                score += scoreRewardForStage;
+                gameOverTimer = winTimerStart;
+            }
+        }
+    }
+}
+
+//_____________________________________________________________________________________________________________________________________
+//_____________________________________________________________________________________________________________________________________
 void LevelScene::updateEnemiesCollision()
 {
     // iterate enemies for collision
@@ -1117,7 +1271,61 @@ void LevelScene::updateEnemiesCollision()
                 // player killed by enemy
                 removeObject(player);
                 player = nullptr;
-                gameOver();
+                if (player2 == nullptr && player3 == nullptr && player4 == nullptr)
+                {
+                    gameOver();
+                }
+            }
+        }
+        if (player2 != nullptr)
+        {
+            // set width to smaller size
+            SDL_Rect playerRect2 = player2->getRect();
+            playerRect2.w = static_cast<int>(playerRect2.w * 0.2);
+            playerRect2.h = static_cast<int>(playerRect2.h * 0.2);
+            if (isCollisionDetected(playerRect2, enemy->getRect()))
+            {
+                // player killed by enemy
+                removeObject(player2);
+                player2 = nullptr;
+                if (player == nullptr && player3 == nullptr && player4 == nullptr)
+                {
+                    gameOver();
+                }
+            }
+        }
+        if (player3 != nullptr)
+        {
+            // set width to smaller size
+            SDL_Rect playerRect3 = player3->getRect();
+            playerRect3.w = static_cast<int>(playerRect3.w * 0.2);
+            playerRect3.h = static_cast<int>(playerRect3.h * 0.2);
+            if (isCollisionDetected(playerRect3, enemy->getRect()))
+            {
+                // player killed by enemy
+                removeObject(player3);
+                player3 = nullptr;
+                if (player == nullptr && player2 == nullptr && player4 == nullptr)
+                {
+                    gameOver();
+                }
+            }
+        }
+        if (player4 != nullptr)
+        {
+            // set width to smaller size
+            SDL_Rect playerRect4 = player4->getRect();
+            playerRect4.w = static_cast<int>(playerRect4.w * 0.2);
+            playerRect4.h = static_cast<int>(playerRect4.h * 0.2);
+            if (isCollisionDetected(playerRect4, enemy->getRect()))
+            {
+                // player killed by enemy
+                removeObject(player4);
+                player4 = nullptr;
+                if (player == nullptr && player2 == nullptr && player3 == nullptr)
+                {
+                    gameOver();
+                }
             }
         }
         if(player != nullptr)
@@ -1139,6 +1347,11 @@ void LevelScene::updateEnemiesCollision()
     }
 }
 
+
+
+
+//_____________________________________________________________________________________________________________________________________
+//_____________________________________________________________________________________________________________________________________
 void LevelScene::updateBangsCollision()
 {
     // check for bang collision
@@ -1190,7 +1403,58 @@ void LevelScene::updateBangsCollision()
             {
                 removeObject(player);
                 player = nullptr;
-                gameOver();
+                if (player2 == nullptr && player3 == nullptr && player4 == nullptr)
+                {
+                    gameOver();
+                }
+            }
+        }
+
+        if (player2 != nullptr)
+        {
+            SDL_Rect playerRect2 = player2->getRect();
+            playerRect2.w = static_cast<int>(playerRect2.w * 0.2f);
+            playerRect2.h = static_cast<int>(playerRect2.h * 0.2f);
+            if (isCollisionDetected(playerRect2, bang->getRect()))
+            {
+                removeObject(player2);
+                player2 = nullptr;
+                if (player == nullptr && player3 == nullptr && player4 == nullptr)
+                {
+                    gameOver();
+                }
+            }
+        }
+
+        if (player3 != nullptr)
+        {
+            SDL_Rect playerRect3 = player3->getRect();
+            playerRect3.w = static_cast<int>(playerRect3.w * 0.2f);
+            playerRect3.h = static_cast<int>(playerRect3.h * 0.2f);
+            if (isCollisionDetected(playerRect3, bang->getRect()))
+            {
+                removeObject(player3);
+                player3 = nullptr;
+                if (player == nullptr && player2 == nullptr && player4 == nullptr)
+                {
+                    gameOver();
+                }
+            }
+        }
+
+        if (player4 != nullptr)
+        {
+            SDL_Rect playerRect4 = player4->getRect();
+            playerRect4.w = static_cast<int>(playerRect4.w * 0.2f);
+            playerRect4.h = static_cast<int>(playerRect4.h * 0.2f);
+            if (isCollisionDetected(playerRect4, bang->getRect()))
+            {
+                removeObject(player4);
+                player4 = nullptr;
+                if (player == nullptr && player2 == nullptr && player3 == nullptr)
+                {
+                    gameOver();
+                }
             }
         }
     }

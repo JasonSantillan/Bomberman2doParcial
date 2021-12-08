@@ -110,7 +110,6 @@ private:
     // score update
     void updateScore();
     // update collisions
-    void updatePlayerCollision();
     void updateEnemiesCollision();
     void updateBangsCollision();
     bool isCollisionDetected(const SDL_Rect& rect1, const SDL_Rect& rect2) const;
@@ -169,6 +168,11 @@ private:
     void updateMovementPlayer2(const bool isPressed, const int keycode);
     void updateMovementPlayer3(const bool isPressed, const int keycode);
     void updateMovementPlayer4(const bool isPressed, const int keycode);
+
+    void updatePlayerCollision();
+    void updatePlayerCollision2();
+    void updatePlayerCollision3();
+    void updatePlayerCollision4();
     //_________________________________________________________________________________________________________________________________
     //_________________________________________________________________________________________________________________________________
     
